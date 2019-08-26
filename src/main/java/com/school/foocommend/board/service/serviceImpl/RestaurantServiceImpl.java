@@ -60,4 +60,9 @@ public class RestaurantServiceImpl implements RestaurantService{
 	public List<RestaurantDto> selectRestaurantListCategoryInfiniteDown(Map<String, Object> commandMap) throws Exception {
 		return restaurantDao.selectRestaurantListCategoryInfiniteDown(commandMap);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectPopularRestaurant() throws Exception {
+		return restaurantDao.selectPopularRestaurant();
+	}
 }

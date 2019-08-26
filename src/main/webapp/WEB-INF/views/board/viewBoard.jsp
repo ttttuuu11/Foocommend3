@@ -9,6 +9,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+.recommend-card {
+	border-bottom: 2px solid gold;
+}
+</style>
 <body>
 	<div class="row">
 		<!-- foodCategorys -->
@@ -80,6 +85,31 @@
 				<div class="mt-2 mb-2">
 					<img src="<c:url value='/resources/food_category/bread2.png'/>"
 						width="50px" height="50px"><span class="ml-2"><b>제과점</b></span>
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="text-center">
+				<div class="container">
+					<div class="row justify-content-center">
+						<c:forEach var="restaurantItem" items="${popularRestaurantList}">
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-4 mr-4">
+												<div class="card p-3 shadow">
+								
+								<div class=" recommend-card ">
+									<a>${restaurantItem.restaurant_title}</a>
+								</div>
+								<div>
+									<input type="hidden" value="${restaurantItem.restaurant_idx}"
+										data-bno="${restaurantItem.restaurant_idx}" class="rIdx" /> <img
+										class="card-img-top restaurantCardImage"
+										src="<c:url value='/resources/store_image/${restaurantItem.restaurant_idx}.jpg'/>"
+										alt="X">
+								</div>
+								</div>
+							</div>
+						</c:forEach>
+					</div>
 				</div>
 			</div>
 		</div>

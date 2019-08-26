@@ -35,33 +35,7 @@ include
 
 
 
-
-
-
- 
-
-
-
-
-
-
-
-
-
 media-breakpoint-only
-
-
-
-
-
-
-
-
-
- 
-
-
-
 
 
 
@@ -76,42 +50,8 @@ xl
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 ){
 column-count
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-:
-
-
-
-
-
-
-
-
 
 
 
@@ -205,12 +145,96 @@ column-count
 											}
 										});
 							});
+
+			$(".scrollBTN")
+					.on(
+							"click",
+							function() {
+								var lastbno = $(".rIdx:last").attr("data-bno");
+								var cIdx = $("#CATEGORY_IDX").val();
+
+								$
+										.ajax({
+											type : 'post',
+											url : '/foocommend/board/infiniteScrollRestaurant',
+											headers : {
+												"Content-Type" : "application/json",
+												"X-HTTP-Method-Override" : "POST"
+											},
+											dataType : 'json',
+											data : JSON.stringify({
+												bno : lastbno,
+												restaurant_food_kind : cIdx
+											}),
+											success : function(data) {
+												console.log(data);
+												var str = "";
+												console.log("data1" + this);
+												// 5. 받아온 데이터가 ""이거나 null이 아닌 경우에 DOM handling을 해준다.
+												if (data != "") {
+													//6. 서버로부터 받아온 data가 list이므로 이 각각의 원소에 접근하려면 each문을 사용한다.
+													$(data)
+															.each(
+																	// 7. 새로운 데이터를 갖고 html코드형태의 문자열을 만들어준다.
+																	function() {
+																		str += '<div class="card p-3 shadow">'
+																				+ '<input type="hidden" value="'+this.restaurant_idx+'"'
+																				+ 'data-bno="'+this.restaurant_idx+'"'+' class="rIdx" /> <img'
+																				+ 'class="card-img-top restaurantCardImage"'
+																				+ 'src="<c:url value="'
+																				+'/resources/store_image/'
+																				+ this.restaurant_idx
+																				+'.jpg"/>"'
+																				+ 'alt="X">'
+																				+ '<div class="card-body restaurantCard">'
+																				+ '<h5 class="card-title">'
+																				+ this.restaurant_title
+																				+ '</h5>'
+																				+ '<small>'
+																				+ this.restaurant_street_add
+																				+ '</small>'
+																				+ '<hr>'
+																				+ '<p class="card-text">'
+																				+ this.restaurant_menu
+																				+ '</p>'
+																				+ '</div>'
+																				+ '<div class="row flex-row-reverse mr-2">'
+																				+ '<c:if test="${empty '+this.user_name+'}">'
+																				+ '<a class="scrapBTN"><img'
+																				+ 'src="<c:url value="'+'/resources/ui_image/star_.png"/>"'
+																				+ 'width="30px" height="30px"></a>'
+																				+ '</c:if>'
+																				+ '<c:if test="${!empty '
+																				+ this.user_name
+																				+ '}">'
+																				+ '<a class="scrapBTN"><img'
+																				+ 'src="<c:url value="'+'/resources/ui_image/star.png"/>" width="30px"'
+																				+ 'height="30px"></a>'
+																				+ '</c:if>'
+																				+ '<a class="likeBTN mr-4"><img'
+																				+ 'src="<c:url value="'+'/resources/ui_image/like_.png"/>" width="30px"'
+																				+ 'height="30px"></a>'
+																				+ '</div>'
+																				+ '</div>'
+																				+ '<input type="hidden" class="scrolling">';
+																	});
+													$(".scrolling:last").after(
+															str);
+												}// if : data!=null
+												else { // 9. 만약 서버로 부터 받아온 데이터가 없으면 그냥 아무것도 하지말까..
+													console
+															.log("더 불러올 데이터가 없습니다.");
+												}// else
+											}// success
+										});// ajax	
+							});
 		});
 	</script>
 
 
 	<div class="row">
 		<!-- foodCategorys -->
+		<input type="hidden" value="${CATEGORY_IDX }" id="CATEGORY_IDX">
 		<div
 			class="col-sm-3 col-md-3 col-lg-3 col-xl-3 d-none d-sm-block bg-light sidebar justify-content-center navbar navbar-expand">
 			<h3 style="text-align: center">CATEGORY</h3>
@@ -287,7 +311,8 @@ column-count
 			<c:forEach var="restaurantItem" items="${restaurantScrapList }"
 				varStatus="status">
 				<div class="card p-3 shadow">
-					<input type="hidden" value="${restaurantItem.restaurant_idx}" /> <img
+					<input type="hidden" value="${restaurantItem.restaurant_idx}"
+						data-bno="${restaurantItem.restaurant_idx}" class="rIdx" /> <img
 						class="card-img-top restaurantCardImage"
 						src="<c:url value='/resources/store_image/${restaurantItem.restaurant_idx}.jpg'/>"
 						alt="X">
@@ -320,7 +345,12 @@ column-count
 						<!-- <button type="button" class="btn btn-outline-primary likeBTN">좋아요</button> -->
 					</div>
 				</div>
+				<input type="hidden" class="scrolling">
+
 			</c:forEach>
+		</div>
+		<div class="col">
+			<button type="button" class="btn btn-outline-primary scrollBTN col-12">더보기</button>
 		</div>
 	</div>
 </body>

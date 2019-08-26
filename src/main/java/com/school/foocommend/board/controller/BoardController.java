@@ -77,6 +77,9 @@ public class BoardController {
 		log.info(username);
 		log.info(password);
 		
+		List<Map<String,Object>> popularRestaurantList = restaurantService.selectPopularRestaurant();
+		
+		mv.addObject("popularRestaurantList",popularRestaurantList);
 		mv.addObject("username",username);
 		mv.addObject("password",password);
 		
@@ -165,10 +168,23 @@ public class BoardController {
 		log.debug(recommentRestaurantList.toString());
 
 		mv.addObject("username",username);
+		mv.addObject("CATEGORY_IDX",restaurantFoodKind);
 		mv.addObject("restaurantScrapList",recommentRestaurantList);
 
 		
 		return mv;
+	}
+	
+	@RequestMapping(value = "/infiniteScrollRestaurant", method = RequestMethod.POST)
+	public @ResponseBody List<RestaurantDto> infiniteScrollRestaurant(@RequestBody Map<String, Object> commandMap)
+			throws Exception {
+		Integer start_no = (Integer.parseInt((String) commandMap.get("bno"))) + 1;
+
+		commandMap.put("start_no", start_no);
+
+		List<RestaurantDto> listAll = restaurantService.selectRestaurantListCategoryInfiniteDown(commandMap);
+
+		return listAll;
 	}
 
 }

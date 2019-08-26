@@ -21,4 +21,7 @@ public interface RestaurantService {
 	List<RestaurantDto> selectRestaurantListCategory(Map<String,Object> commandMap) throws Exception;
 	
 	List<RestaurantDto> selectRestaurantListCategoryInfiniteDown(Map<String,Object> commandMap) throws Exception;
+
+	List<Map<String,Object>> selectPopularRestaurant() throws Exception;
+
 }
