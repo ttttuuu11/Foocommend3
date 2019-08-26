@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+ <mapper namespace="com.school.foocommend.recommend.dao.RecommendDao">
+ 	<select id="selectRestaurantList" resultType="hashmap">
+		<![CDATA[ select * from restaurant where restaurant_idx=#{idx}; ]]>
+	</select>
+	<select id="selectRestaurantScrap" parameterType="String"
+		resultType="com.school.foocommend.board.vo.RestaurantDto">
+		<![CDATA[ select r.restaurant_idx, r.restaurant_title, r.restaurant_street_add,r.restaurant_menu,s.user_name
+					from restaurant as r left join scrap_restaurant as s
+					on r.restaurant_idx = s.restaurant_idx WHERE r.restaurant_idx=#{restaurantIdx};
+  		]]>
+	</select>
+	<select id="selectRecommendRestaurant" parameterType="String"
+	resultType="hashmap">
+		<![CDATA[ select * from recommend_restaurant where user_name=#{username}]]>
+	</select>
+	<select id="selectRestaurantResult" resultType="hashmap" parameterType="hashmap">
+		<![CDATA[
+	select r.restaurant_idx, r.restaurant_title, r.restaurant_street_add,r.restaurant_menu,s.user_name
+	from restaurant as r left join scrap_restaurant as s
+	on r.restaurant_idx = s.restaurant_idx WHERE r.restaurant_idx=#{restaurant_idx}	]]>
+	</select>
+	
+	<!-- insert -->
+	<insert id="insertRecommendRestaurant" parameterType="hashmap">
+		<![CDATA[ insert into recommend_restaurant (restaurant_idx,user_name) values(#{restaurantIdx},#{username});]]>	
+	</insert>
+</mapper>

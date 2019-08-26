@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.foocommend.comment.dao.CommentDao">
+	<!-- select -->
+	<select id="selectCommentList" parameterType="String"
+		resultType="hashmap">
+		<![CDATA[ 
+			SELECT comment_idx,username,comment_content,restaurant_idx,isdelete,profile_img,
+			DATE_FORMAT(create_date, '%Y-%m-%d %h:%i:%s') as create_date,count_reply_comment,reply_username,parent_comment_idx 
+			FROM comment;
+		]]>
+	</select>
+	<select id="selectReplyCommentList" parameterType="String"
+		resultType="hashmap">
+		<![CDATA[
+			SELECT username,comment_content,profile_img,create_date,parent_comment_idx FROM comment_reply WHERE parent_comment_idx = #{parent_comment_idx};
+		]]>
+	</select>
+	<select id="countReplyComment" parameterType="String"
+		resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) FROM comment_reply WHERE parent_comment_idx=#{parent_commend_idx};
+		]]>
+	</select>
+
+	<!-- insert -->
+	<insert id="insertComment" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO comment(username,comment_content,restaurant_idx,profile_img,reply_username,parent_comment_idx) VALUES(#{username},#{commentContent},#{restaurantIdx},#{profileImg},#{reply_username},#{parent_comment_idx});
+		]]>
+	</insert>
+	<insert id="insertReplyComment" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO comment_reply(username,comment_content,profile_img,reply_username,parent_comment_idx,reply_comment_idx) VALUES(#{username},#{commentContent},#{profileImg},#{reply_username},#{parent_comment_idx},#{reply_comment_idx});
+		]]>
+	</insert>
+
+	<!-- update -->
+	<update id="deleteComment" parameterType="String">
+		<![CDATA[
+			UPDATE comment SET isdelete='N' WHERE comment_idx=#{comment_idx};
+		]]>
+	</update>
+	<update id="updateContentComment"
+		parameterType="com.school.foocommend.comment.vo.CommentDto">
+		<![CDATA[
+			UPDATE comment SET comment_content=#{comment_content} WHERE comment_idx=#{comment_idx};
+		]]>
+	</update>
+	<update id="updateCountReplyComment" parameterType="String">
+		<![CDATA[
+			UPDATE comment SET count_reply_comment = count_reply_comment+1 WHERE comment_idx=#{comment_idx};
+		]]>
+	</update>
+	<!-- <update id="updateContentComment" parameterType="hashmap"> <![CDATA[ 
+		UPDATE comment_reply SET comment_content='' WHERE idx=''; ]]> </update> -->
+</mapper>

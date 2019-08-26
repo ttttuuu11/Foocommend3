@@ -1,0 +1,260 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/animate.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<style type="text/css">
+#chatBTN {
+	position: fixed;
+	bottom: 30px;
+	right: 70px;
+	z-index: 100;
+}
+
+#chatBoard {
+	width: 350px;
+	height: 510px;
+	position: fixed;
+	bottom: 130px;
+	right: 60px;
+	z-index: 99;
+	border-radius: 15px;
+}
+
+#chatBoardHeader {
+	background-color: #F7D358;
+	border-top-right-radius: 15px 15px;
+	border-top-left-radius: 15px 15px;
+	position: absolute;
+	width: 350px;
+}
+
+#chatBoardFoot {
+	background-color: #ffffff;
+	border: solid 2px #E6E6E6;
+	border-bottom-right-radius: 15px 15px;
+	border-bottom-left-radius: 15px 15px;
+	height: 50px;
+}
+
+.scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+p {
+	margin-bottom: 0px;
+}
+
+.chatProfileImg {
+	width: 40px;
+	height: 40px;
+	border: solid 1px #cccccc;
+	border-radius: 50%;
+	margin-top: 8px;
+	margin-left: 15px;
+	margin-right: 5px;
+}
+
+.bubbleLeft {
+	position: relative;
+	width: 250px;
+	height: auto;
+	padding: 0px;
+	margin-left:10px;
+	background: #FFFFB5;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 14px;
+}
+
+.bubbleLeft:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 6px 8px 6px 0;
+	border-color: transparent #FFFFB5;
+	width: 0;
+	left: -6px;
+	top: 17%;
+}
+
+.bubbleRight {
+	position: relative;
+	width: 250px;
+	height: auto;
+	padding: 0px;
+	margin-left:10px;
+	background: #DCDBFF;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 14px;
+}
+
+.bubbleRight:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 6px 0px 6px 8px;
+	border-color: transparent #DCDBFF;
+	width: 0;
+	right: -6px;
+	top: 17%;
+}
+</style>
+<body>
+	<!-- chatting script -->
+	<script type="text/javascript">
+		var stompClient = null;
+		connect();
+
+		function setConnected(connected) {
+			document.getElementById('connect').disabled = connected;
+			document.getElementById('disconnect').disabled = !connected;
+			document.getElementById('conversationDiv').style.visibility = connected ? 'visible'
+					: 'hidden';
+			//document.getElementById('response').innerHTML = '';
+		}
+		
+		function connect() {
+			var socket = new SockJS('/foocommend/chat');
+			stompClient = Stomp.over(socket);
+			stompClient.connect({}, function(frame) {
+				//setConnected(true);
+				console.log('Connected: ' + frame);
+				stompClient.subscribe('/topic/messages',
+						function(messageOutput) {
+							showMessageOutput(JSON.parse(messageOutput.body));
+						});
+			});
+		}
+
+		function disconnect() {
+			if (stompClient != null) {
+				stompClient.disconnect();
+			}
+			setConnected(false);
+			console.log("Disconnected");
+		}
+
+		function sendMessage() {
+			//var from = document.getElementById('from').value;
+			var from = "admin";
+			var text = document.getElementById('text').value;
+			stompClient.send("/app/chat", {}, JSON.stringify({
+				'from' : from,
+				'text' : text
+			}));
+		}
+
+		function showMessageOutput(messageOutput) {
+			var response = document.getElementById('response');
+			var p = document.createElement('p');
+			
+			var messageBox = document.createElement('div');
+			messageBox.classList.add("row");
+			
+			var profileImg = document.createElement('img');
+			
+			var profile_img = '<%= session.getAttribute("profile_img") %>';
+						
+			profileImg.src = ('/foocommend/resources/userProfile/'+profile_img);
+			profileImg.classList.add("chatProfileImg");
+			
+			var messageContentsBox = document.createElement('div');
+			var messageContents = document.createElement('p');
+			var messageTitle = document.createElement('p');
+			
+			messageContents.style.padding = "5px";
+			
+			messageContents.appendChild(document
+					.createTextNode(""+messageOutput.text));
+			messageTitle.appendChild(document.createTextNode(""+messageOutput.from
+					+ " " + messageOutput.time));
+			
+			var username = '<%= session.getAttribute("username") %>';
+
+			if(messageOutput.from==username){
+				messageContents.classList.add("bubbleRight");
+				messageBox.classList.add("d-flex");
+				messageBox.classList.add("flex-row-reverse");
+				messageTitle.classList.add("d-flex");
+				messageTitle.classList.add("flex-row-reverse");
+				messageBox.classList.add("mr-1");
+;			}else{
+				messageContents.classList.add("bubbleLeft");
+			}
+			messageContentsBox.appendChild(messageTitle);
+			messageContentsBox.appendChild(messageContents);
+			messageBox.appendChild(profileImg);
+			messageBox.appendChild(messageContentsBox);
+			response.appendChild(messageBox);
+		}
+	</script>
+
+	<div class="card shadow-lg" id="chatBoard" style="display: none;">
+		<div class="card-header card-title shadow" id="chatBoardHeader">
+			<img src="<c:url value='/resources/ui_image/group_chat.png'/>"
+				width="20px" height="20px"> <small><b>&nbsp;채팅</b></small>
+		</div>
+		<div class="card-body">
+			<div class="scrollbar"
+				style="overflow: scroll; width: 320px; height: 460px;">
+				<br> <br>
+				<p class="card-text" id="response">
+					<small>채팅을 시작했습니다.</small><br>
+				</p>
+
+			</div>
+		</div>
+		<!-- style='display: inline; float: left; width: 250px' -->
+		<div class="card-footer " style='display: inline; min-width: 350px;'
+			id="chatBoardFoot">
+			<div style='display: inline; float: left; width: 250px;'>
+				<input type="text" id="text" class="form-control"
+					placeholder="Text input">
+			</div>
+			<div
+				style='display: inline; float: left; width: 40px; height: 35px; background-color: #DCDBFF; text-align: center;'>
+				<a id="sendBTN" onclick="sendMessage();"><img
+					src="<c:url value='/resources/ui_image/send.png'/>" width="28px"
+					height="28px" style="margin-top: 3px;"></a>
+			</div>
+		</div>
+	</div>
+	<a id="chatBTN"><img
+		src="<c:url value='/resources/ui_image/chat.png'/>" width="50px"
+		height="50px"></a>
+
+
+	<!-- jquery animate -->
+	<script>
+		$(function() {
+			$("#chatBTN").on("click", function() {
+				var chatDisplayStatus = $("#chatBoard").css("display");
+				if (chatDisplayStatus == "none") {
+					$("#chatBoard").removeClass("animated bounceOutDown");
+					$("#chatBoard").toggle();
+					$("#chatBoard").addClass("animated bounceInUp");
+				} else {
+					$("#chatBoard").removeClass("animated bounceInUp");
+					$("#chatBoard").addClass("animated bounceOutDown");
+					setTimeout(function() {
+						$("#chatBoard").toggle();
+					}, 800);
+
+				}
+			});
+		})
+	</script>
+</body>
+</html>

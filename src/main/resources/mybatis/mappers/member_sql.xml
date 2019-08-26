@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 맵핑될 DAO 인터페이스의 Full name 을 줍니다. -->
+<mapper namespace="com.school.foocommend.member.dao.MemberDao">
+	<!-- id 속성은 DAO 의 메소드와 같아야 한다. 여기의 boardVO 는 mybatis-confg.xml 에 Alias 되어 
+		있습니다. -->
+	<select id="selectBoardList" resultType="hashmap">
+		<![CDATA[ select * from member; ]]>
+	</select>
+
+	<select id="selectMember" parameterType="String"
+		resultType="com.school.foocommend.member.vo.UserDto">
+		<![CDATA[  SELECT *
+    		  FROM test_user
+     		 WHERE 1 = 1
+     		 AND username = #{username}
+ 		 ]]>
+	</select>
+	<select id="selectMemberProfileImage" parameterType="String"
+		resultType="String">
+		<![CDATA[  SELECT profile_img
+   		   FROM test_user
+   		   WHERE 1 = 1
+   		   AND username = #{username}
+ 		 ]]>
+	</select>
+	<select id="selectUidMember" parameterType="String" resultType="hashmap">
+		<![CDATA[
+			SELECT COUNT(*) as cnt, username, uid FROM test_user WHERE uid=#{uid};
+		]]>
+	</select>
+	
+	<!-- insert -->
+	<insert id="insertMember" parameterType="com.school.foocommend.member.vo.UserDto">
+		<![CDATA[  INSERT INTO test_user(username, password,email) VALUES(#{username},#{password},#{email});
+  		]]>
+	</insert>
+	
+	<!-- update -->
+	<update id="updateProfileImage" parameterType="com.school.foocommend.member.vo.UserDto">
+		<![CDATA[
+			UPDATE test_user SET profile_img = #{profile_img} WHERE username=#{username};
+		]]>
+	</update>
+	<update id="updateUid" parameterType="com.school.foocommend.member.vo.UserDto">
+		<![CDATA[
+			UPDATE test_user SET uid = #{uid} WHERE username=#{username};
+		]]>
+	</update>
+	<update id="updateMailAuth" parameterType="String">
+		<![CDATA[
+			UPDATE test_user set authNum = 'Y' WHERE username =#{username};
+		]]>
+	</update>
+</mapper>
