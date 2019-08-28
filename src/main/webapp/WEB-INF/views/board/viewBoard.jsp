@@ -91,9 +91,12 @@
 		<div>
 			<div class="text-center">
 				<div class="container">
+					<div class="justify-content-center">
+					
+					</div>
 					<div class="row justify-content-center">
 						<c:forEach var="restaurantItem" items="${popularRestaurantList}">
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-4 mr-4">
+							<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-4 mr-3">
 												<div class="card p-3 shadow">
 								
 								<div class=" recommend-card ">

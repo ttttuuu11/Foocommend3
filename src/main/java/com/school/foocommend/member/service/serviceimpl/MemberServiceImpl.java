@@ -63,5 +63,10 @@ public class MemberServiceImpl implements MemberService{
 	public void updateMailAuth(String username) throws Exception {
 		memberDao.updateMailAuth(username);
 	}
+
+	@Override
+	public String selectMemberEmail(String username) throws Exception {
+		return memberDao.selectMemberEmail(username);
+	}
 	
 }

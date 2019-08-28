@@ -51,7 +51,7 @@
 			GROUP BY restaurant_idx) as p 
 		INNER JOIN restaurant as r 
 		ON p.restaurant_idx =  r.restaurant_idx
-		ORDER BY p.views DESC;
+		ORDER BY p.views DESC limit 3;
 	]]>
 	</select>
 

@@ -26,5 +26,7 @@ public interface MemberDao {
 	public Map<String,Object> selectUidMember(String uid) throws Exception;
 	
 	public void updateMailAuth(String username) throws Exception;
+	
+	public String selectMemberEmail(String username) throws Exception;
 }
 

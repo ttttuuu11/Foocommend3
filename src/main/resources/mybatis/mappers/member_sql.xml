@@ -30,6 +30,11 @@
 			SELECT COUNT(*) as cnt, username, uid FROM test_user WHERE uid=#{uid};
 		]]>
 	</select>
+	<select id="selectMemberEmail" parameterType="String" resultType="String">
+		<![CDATA[
+			SELECT email FROM test_user WHERE username=#{username}
+		]]>
+	</select>
 	
 	<!-- insert -->
 	<insert id="insertMember" parameterType="com.school.foocommend.member.vo.UserDto">

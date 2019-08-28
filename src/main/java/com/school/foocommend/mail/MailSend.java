@@ -23,7 +23,7 @@ public class MailSend {
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	public void MailSend(String uid) {
+	public void MailSend(String uid, String email) {
 		Properties prop = System.getProperties();
 		prop.put("mail.smtp.starttls.enable", "true");
 		prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -38,8 +38,8 @@ public class MailSend {
 		
 		try {
 			msg.setSentDate(new Date());
-			msg.setFrom(new InternetAddress("ttttuuu205@gmail.com","수민"));
-			InternetAddress to = new InternetAddress("ttttuuu11@naver.com");
+			msg.setFrom(new InternetAddress("ttttuuu205@gmail.com","Foocommend"));
+			InternetAddress to = new InternetAddress(email);
 			msg.setRecipient(javax.mail.Message.RecipientType.TO,to);
 			msg.setSubject("[Foocommend]인증 메일입니다.","UTF-8");
 			msg.setContent("<a href='http://localhost:8080/foocommend/member/mailAuth?uid="+uid+"'>인증하기</a>", "text/html;charset=UTF-8");

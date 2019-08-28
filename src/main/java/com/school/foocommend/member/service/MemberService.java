@@ -24,4 +24,6 @@ public interface MemberService {
 	Map<String,Object> selectUidMember(String uid) throws Exception;
 	
 	void updateMailAuth(String username) throws Exception;
+	
+	String selectMemberEmail(String username) throws Exception;
 }

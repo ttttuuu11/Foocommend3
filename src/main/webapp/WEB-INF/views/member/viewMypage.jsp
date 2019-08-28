@@ -10,9 +10,9 @@
 <title>Insert title here</title>
 </head>
 <style>
-.profileImage{
+.profileImage {
 	border-radius: 50%;
-	border: solid 3px #fff000 ;
+	border: solid 3px #fff000;
 }
 </style>
 <body>
@@ -21,18 +21,87 @@
 	<script>
 		$(function() {
 			$("#mailAuthBTN").on("click", function() {
+				swal.fire(
+						{
+							title : '이메일을 입력하세요',
+							html : '<input type="text" name="emailForm" id="emailForm" class="form-control">'
+						}).then(function() {
+							var emailForm = $("#emailForm").val();
+							var check ="";
+							$.ajax({
+								url : '/foocommend/member/mailCheck',
+								headers : {
+									"Content-Type" : "application/json; charset=UTF-8",
+									"X-HTTP-Method-Override" : "POST"
+								},
+								dataType : 'json',
+								type : 'post',
+								data : JSON.stringify({ // 서버로 보낼 데이터 명시
+									email: emailForm
+								}),
+								success : function(data) {
+									$(data).each(function() {
+										check = String(this.check)
+									});
+									console.log(check)
+									if(check=="F"){
+										const Toast = Swal.mixin({
+											toast : true,
+											showConfirmButton : false,
+											timer : 3000
+										});
+	
+										Toast.fire({
+											type : 'warning',
+											title : '메일주소가 잘못되었습니다.',
+											html:'회원가입 시 작성한 메일주소가 맞는 지 확인해주세요.'
+										})
+									}else{
+										$.ajax({
+											url : '/foocommend/member/mail',
+											headers : {
+												"Content-Type" : "application/json; charset=UTF-8",
+												"X-HTTP-Method-Override" : "POST"
+											},
+											dataType : 'json',
+											type : 'post',
+											data : JSON.stringify({ // 서버로 보낼 데이터 명시
+												
+											}),
+											success : function() {
+												//데이터 전송 성공
+												const Toast = Swal.mixin({
+													toast : true,
+													showConfirmButton : false,
+													timer : 3000
+												});
 
+												Toast.fire({
+													type : 'success',
+													title : '메일을 확인해주세요'
+												})
+											}
+										});
+									}
+								}
+							});
+				});
 			});
 
-			$("#changeProfileImgBTN").on("click", function() {
-				swal.fire({
-					  title: '이미지 선택', 
-					  html: '<form id="imageForm" method="post" action="/foocommend/upload/uploadForm" enctype="multipart/form-data"><input type="file" name="file"></form>'
-					}).then(function(){
-						$("#imageForm").submit();
-						alert("파일 업로드 됨");
-					});
-			});
+			$("#changeProfileImgBTN")
+					.on(
+							"click",
+							function() {
+								swal
+										.fire(
+												{
+													title : '이미지 선택',
+													html : '<form id="imageForm" method="post" action="/foocommend/upload/uploadForm" enctype="multipart/form-data"><input type="file" name="file"></form>'
+												}).then(function() {
+											$("#imageForm").submit();
+											alert("파일 업로드 됨");
+										});
+							});
 		})
 
 		function post_to_url(path, params, method) {
@@ -57,7 +126,7 @@
 		<!-- foodCategorys -->
 		<nav
 			class="col-sm-3 col-md-3 col-lg-3 col-xl-3 d-none d-sm-block bg-light sidebar justify-content-center">
-			<h3 style="text-align: center">CATEGORY</h3>			
+			<h3 style="text-align: center">CATEGORY</h3>
 			<div
 				class="d-flex justify-content-center mt-3 flex-fill p-1 shadow food_category">
 				<div class="mt-2 mb-2">
@@ -144,7 +213,8 @@
 			</div>
 			<div class="row justify-content-center mt-4">
 				<div class="col-md-5 text-center">
-					<img  class="profileImage shadow" src="<c:url value='/resources/userProfile/${member.profile_img }'/>"
+					<img class="profileImage shadow"
+						src="<c:url value='/resources/userProfile/${member.profile_img }'/>"
 						width="200px" height="200px">
 					<!-- 유저 프로필 이미지 넣기  -->
 					<br>
@@ -160,9 +230,7 @@
 							src="<c:url value='/resources/ui_image/comment.png'/>"
 							width="15px" height="15px"> 활동점수&nbsp;&nbsp; </small>
 					</h5>
-					<h3>
-						<a id="mailAuthBTN">메일인증</a>
-					</h3>
+					<button id="mailAuthBTN" class="btn btn-outline-info mt-4">메일인증</button>
 				</div>
 			</div>
 		</div>

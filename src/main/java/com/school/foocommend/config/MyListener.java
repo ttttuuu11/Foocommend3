@@ -8,7 +8,7 @@ public class MyListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("Context Initialized");
-        sce.getServletContext().setAttribute("name", "keesun");
+        sce.getServletContext().setAttribute("name", "test");
     }
 
     @Override

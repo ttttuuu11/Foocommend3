@@ -1,5 +1,6 @@
 package com.school.foocommend.member.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.school.foocommend.common.CommandMap;
@@ -89,11 +92,31 @@ public class MemberController {
 		return mv;
 	}
 	
-
+	@RequestMapping(value="/mailCheck", method = RequestMethod.POST)
+	public @ResponseBody List<Map<String,String>> mailCheck(@RequestBody Map<String, String> commandMap) 
+			throws Exception{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = (UserDetails) principal;
+		String username = userDetails.getUsername();
+		String email = memberService.selectMemberEmail(username);
+		List<Map<String,String>> json = new ArrayList<Map<String,String>>(); 
+	
+		//String json ="{\"check\" :" + "\"F\"" + ",\"}";	
+		if(email.equals(commandMap.get("email"))){
+			commandMap.put("check","T");
+			json.add(commandMap);
+			return json;
+		}
+		commandMap.put("check","F");
+		json.add(commandMap);
+		return json;
+	}
+	
 	@RequestMapping(value = "/mail")
 	public void mailsending() throws Exception {
 		UUID uid = UUID.randomUUID();
-		
+		log.debug("uid");
+
 		UserDto member = new UserDto();
 		member.setUid(uid.toString());
 		
@@ -103,15 +126,20 @@ public class MemberController {
 		
 		member.setUsername(username);
 		memberService.updateUid(member); 
-		mailSend.MailSend(uid.toString());
+		String email = memberService.selectMemberEmail(username);
+		
+		mailSend.MailSend(uid.toString(),email);
 	}
 
 	@RequestMapping(value = "/mailAuth")
-	public void mailAuth(@RequestParam(value = "uid", required = false) String uid) throws Exception {		
+	public ModelAndView mailAuth(@RequestParam(value = "uid", required = false) String uid) throws Exception {		
+		ModelAndView mv = new ModelAndView("/member/viewMypage");
+
 		Map<String,Object> memberUid = new HashMap<String,Object>();
 		memberUid = memberService.selectUidMember(uid);
 		if(Integer.parseInt(memberUid.get("cnt").toString())>0) {
 			memberService.updateMailAuth(memberUid.get("username").toString());
 		}
+		return mv;
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.school.foocommend.logger.LoggerInterceptor;
 
 @Configuration
@@ -41,7 +42,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggerInterceptor).addPathPatterns("/**");
-
     }
     
     @Bean
@@ -51,4 +51,5 @@ public class WebConfig implements WebMvcConfigurer {
      resolver.setMaxUploadSize(200000000);
      return resolver;
     }
+   
 }

@@ -1,5 +1,6 @@
 package com.school.foocommend.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -8,6 +9,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
+import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.school.foocommend.config.security.WebSecurityConfig;
 
 import javax.servlet.FilterRegistration;
@@ -46,7 +48,8 @@ public class WebApplication implements WebApplicationInitializer {
         filter.setInitParameter("encoding", "UTF-8");
         filter.addMappingForServletNames(null, false, "dispatcher");
         
-        
-    }
-    
+        FilterRegistration.Dynamic xssfilter = servletContext.addFilter("xssEscapeServletFilter", XssEscapeServletFilter.class);
+        xssfilter.addMappingForServletNames(null, false, "xssEscapeServletFilter");
+        xssfilter.addMappingForUrlPatterns(null, false, "/*");
+    }    
 }

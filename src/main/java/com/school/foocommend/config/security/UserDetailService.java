@@ -16,16 +16,11 @@ import java.util.Arrays;
 
 import javax.annotation.Resource;
 
-/**
- * Created by yookeun on 2016. 11. 9..
- */
 @Service
 public class UserDetailService implements UserDetailsService {
 		
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
-//    @Autowired
-//    private MemberService dao;
 	@Resource(name = "MemberService")
 	private MemberService dao;
 	
