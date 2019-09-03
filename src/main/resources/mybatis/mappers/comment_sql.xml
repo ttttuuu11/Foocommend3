@@ -8,7 +8,7 @@
 		<![CDATA[ 
 			SELECT comment_idx,username,comment_content,restaurant_idx,isdelete,profile_img,
 			DATE_FORMAT(create_date, '%Y-%m-%d %h:%i:%s') as create_date,count_reply_comment,reply_username,parent_comment_idx 
-			FROM comment;
+			FROM comment WHERE restaurant_idx = #{restaurantIdx};
 		]]>
 	</select>
 	<select id="selectReplyCommentList" parameterType="String"

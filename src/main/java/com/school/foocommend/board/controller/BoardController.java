@@ -112,7 +112,16 @@ public class BoardController {
 	public ModelAndView RestaurantDetail(Map<String, Object> commandMap,  @RequestParam(value = "restaurantIdx", required = false) String restaurantIdx ) throws Exception {
 		ModelAndView mv = new ModelAndView("/board/viewDetail");
 		RestaurantDto restaurant = restaurantService.selectRestaurant(restaurantIdx);
-
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = (UserDetails) principal;
+		String username = userDetails.getUsername();
+		
+		commandMap.put("restaurantIdx",restaurantIdx);
+		commandMap.put("username",username);
+		
+		restaurantService.insertViewRestaurant(commandMap);
+		
 		String tempMenu = restaurant.getRestaurant_menu();
 		int countL = restaurantService.countLikeRestaurant(restaurantIdx);
 		

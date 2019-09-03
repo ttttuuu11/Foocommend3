@@ -46,8 +46,6 @@
 }
 </style>
 
-<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은 APP KEY를 넣으시면 됩니다."></script>
 
 <body>
 	<!-- BTN -->
@@ -342,8 +340,10 @@
 				</div>
 			</div>
 			<div class="ml-4">
+				<!-- 
 				<h6 class="mt-2">분류</h6>
 				<p>${restaurant.restaurant_food_kind }</p>
+				 -->
 				<h6 class="mt-2">주소</h6>
 				<p>${restaurant.restaurant_street_add}</p>
 				<h6 class="mt-2">
@@ -374,7 +374,7 @@
 							<div class="comment">
 								<div class="row">
 									<img
-										src="/foocommend/resources/userProfile/${item.profile_img}"
+										src="<c:url value='/resources/userProfile/${item.profile_img }'/>"
 										width="50px" height="50px">
 									<p class="mt-3 ml-2 comment_username">${item.username }</p>
 									<p class="mt-3 ml-1 comment_date">
@@ -390,7 +390,7 @@
 									<input type="hidden" id="comment_idx"
 										value="${item.comment_idx }">
 									<c:if test="${0 ne item.count_reply_comment}">
-										<a class="commentMenu ml-1 showReplyCommentBTN">답글보기</a>
+										<a class="commentMenu ml-2 showReplyCommentBTN">답글보기</a>
 									</c:if>
 									<c:if test="${0 eq item.count_reply_comment}">
 										<a class="commentMenu"></a>
@@ -417,7 +417,7 @@
 						<div class="row">
 							<img src="/foocommend/resources/userProfile/${profile_img}"
 								width="50px" height="50px">
-							<h6 class="mt-3 ml-2">${username }</h6>
+							<p class="mt-3 ml-2 comment_username">${username }</p>
 						</div>
 						<div class="row">
 							<div class="col-lg-11 col-md-11 mb-1 mt-1 wrap">
@@ -432,9 +432,9 @@
 
 			</div>
 		</div>
-		<!-- <script type="text/javascript"
+		<script type="text/javascript"
 			src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1802d71b18ddcfcd0598b78bd8711b62"></script>
-		 -->
+			
 		<script>
 			// 지도 크기 변경
 			//var maxWidth = document.body.scrollWidth-130
@@ -470,7 +470,6 @@
 			
 			// map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);    
 		</script>
-	</div>
 	</div>
 </body>
 </html>

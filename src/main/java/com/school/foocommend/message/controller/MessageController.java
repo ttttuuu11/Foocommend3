@@ -18,6 +18,6 @@ public class MessageController {
 	public OutputMessage send(Message message) throws Exception {
 		System.out.println("chat");
 	    String time = new SimpleDateFormat("HH:mm").format(new Date());
-	    return new OutputMessage(message.getFrom(), message.getText(), time);
+	    return new OutputMessage(message.getFrom(), message.getText(), time, message.getProfileImg());
 	}
 }

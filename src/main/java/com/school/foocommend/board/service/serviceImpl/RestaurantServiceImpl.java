@@ -65,4 +65,9 @@ public class RestaurantServiceImpl implements RestaurantService{
 	public List<Map<String, Object>> selectPopularRestaurant() throws Exception {
 		return restaurantDao.selectPopularRestaurant();
 	}
+
+	@Override
+	public void insertViewRestaurant(Map<String, Object> commandMap) throws Exception {
+		restaurantDao.insertViewRestaurant(commandMap);
+	}
 }

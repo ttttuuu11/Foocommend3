@@ -88,7 +88,6 @@ public class UploadFileUtils {
 		
 	}//makeDir
 	
-	//음??? 아이콘? 이미지 파일이 아닌경우  썸네일을 대신?
 	private static String makeIcon(String uploadPath, String path, String fileName) throws Exception{
 		String iconName = uploadPath + path + File.separator + fileName;
 		return iconName.substring(uploadPath.length()).replace(File.separatorChar, '/');

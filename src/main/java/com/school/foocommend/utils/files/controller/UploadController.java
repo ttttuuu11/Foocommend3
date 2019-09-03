@@ -77,7 +77,7 @@ public class UploadController {
 		File deletefile = new File(path);
 
 		if(deletefile.exists() == true){
-			deletefile.delete();
+			//deletefile.delete();
 		}
 		
 		Map<String,Object> profileImage = new HashMap<String,Object>();

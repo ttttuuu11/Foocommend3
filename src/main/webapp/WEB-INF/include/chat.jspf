@@ -67,10 +67,10 @@ p {
 
 .bubbleLeft {
 	position: relative;
-	width: 250px;
+	width: auto;
 	height: auto;
 	padding: 0px;
-	margin-left:10px;
+	margin-left: 10px;
 	background: #FFFFB5;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
@@ -87,13 +87,12 @@ p {
 	left: -6px;
 	top: 17%;
 }
-
 .bubbleRight {
 	position: relative;
-	width: 250px;
+	width: auto;
 	height: auto;
 	padding: 0px;
-	margin-left:10px;
+	margin-left: 10px;
 	background: #DCDBFF;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
@@ -109,6 +108,19 @@ p {
 	width: 0;
 	right: -6px;
 	top: 17%;
+}
+
+.sendTextForm{
+	margin-bottom:10px;
+}
+
+.messageTitle{
+	font-size: 13px;
+}
+
+.messageContents{
+	font-size: 13px;
+	padding: 5px;
 }
 </style>
 <body>
@@ -147,13 +159,15 @@ p {
 		}
 
 		function sendMessage() {
-			//var from = document.getElementById('from').value;
-			var from = "admin";
+			var from = '<%=session.getAttribute("username")%>';
 			var text = document.getElementById('text').value;
+			var profileImg = '<%=session.getAttribute("profile_img")%>'
 			stompClient.send("/app/chat", {}, JSON.stringify({
 				'from' : from,
-				'text' : text
+				'text' : text,
+				'profileImg' : profileImg,
 			}));
+			document.getElementById('text').value='';
 		}
 
 		function showMessageOutput(messageOutput) {
@@ -164,15 +178,20 @@ p {
 			messageBox.classList.add("row");
 			
 			var profileImg = document.createElement('img');
-			
-			var profile_img = '<%= session.getAttribute("profile_img") %>';
 						
+			var profile_img = messageOutput.profileImg;
+			
+			
 			profileImg.src = ('/foocommend/resources/userProfile/'+profile_img);
 			profileImg.classList.add("chatProfileImg");
 			
 			var messageContentsBox = document.createElement('div');
 			var messageContents = document.createElement('p');
 			var messageTitle = document.createElement('p');
+			messageTitle.classList.add( 'messageTitle' );
+			messageTitle.classList.add( 'mt-1' );
+			
+			messageContents.classList.add( 'messageContents' );
 			
 			messageContents.style.padding = "5px";
 			
@@ -181,17 +200,19 @@ p {
 			messageTitle.appendChild(document.createTextNode(""+messageOutput.from
 					+ " " + messageOutput.time));
 			
-			var username = '<%= session.getAttribute("username") %>';
+			var username = '<%=session.getAttribute("username")%>';
 
-			if(messageOutput.from==username){
+			if (messageOutput.from == username) {
 				messageContents.classList.add("bubbleRight");
 				messageBox.classList.add("d-flex");
 				messageBox.classList.add("flex-row-reverse");
 				messageTitle.classList.add("d-flex");
 				messageTitle.classList.add("flex-row-reverse");
 				messageBox.classList.add("mr-1");
-;			}else{
+				messageTitle.classList.add("mr-1");
+			} else {
 				messageContents.classList.add("bubbleLeft");
+				messageTitle.classList.add("ml-1");
 			}
 			messageContentsBox.appendChild(messageTitle);
 			messageContentsBox.appendChild(messageContents);
@@ -216,18 +237,22 @@ p {
 
 			</div>
 		</div>
-		<!-- style='display: inline; float: left; width: 250px' -->
-		<div class="card-footer " style='display: inline; min-width: 350px;'
+		<!-- style='display: inline; float: left; width: 250px' 
+		class="card-footer "
+		-->
+		<div style='display: inline; min-width: 350px;'
 			id="chatBoardFoot">
-			<div style='display: inline; float: left; width: 250px;'>
-				<input type="text" id="text" class="form-control"
-					placeholder="Text input">
-			</div>
-			<div
-				style='display: inline; float: left; width: 40px; height: 35px; background-color: #DCDBFF; text-align: center;'>
-				<a id="sendBTN" onclick="sendMessage();"><img
-					src="<c:url value='/resources/ui_image/send.png'/>" width="28px"
-					height="28px" style="margin-top: 3px;"></a>
+			<div class="sendTextForm">
+				<div style='display: inline; float: left; width: 305px;'>
+					<input type="text" id="text" class="form-control "
+						placeholder="입력하세요.">
+				</div>
+				<div
+					style='display: inline; float: left; width: 40px; height: 40px; background-color: #DCDBFF; text-align: center;'>
+					<a id="sendBTN" onclick="sendMessage();"><img
+						src="<c:url value='/resources/ui_image/send.png'/>" width="28px"
+						height="28px" style="margin-top: 3px;"></a>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -24,4 +24,6 @@ public interface RestaurantService {
 
 	List<Map<String,Object>> selectPopularRestaurant() throws Exception;
 
+	void insertViewRestaurant(Map<String, Object> commandMap) throws Exception;
+
 }

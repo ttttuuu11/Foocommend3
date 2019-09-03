@@ -28,4 +28,6 @@ public interface RestaurantDao {
 	public List<RestaurantDto> selectRestaurantListCategoryInfiniteDown(Map<String,Object> commandMap) throws Exception;
 
 	public List<Map<String,Object>> selectPopularRestaurant() throws Exception;
+	
+	public void insertViewRestaurant(Map<String, Object> commandMap) throws Exception;
 }

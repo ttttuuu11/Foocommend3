@@ -22,13 +22,13 @@ public class UserDetailService implements UserDetailsService {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource(name = "MemberService")
-	private MemberService dao;
+	private MemberService memberService;
 	
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDto userDto = null;
 		try {
-			userDto = dao.selectMember(username);
+			userDto = memberService.selectMember(username);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

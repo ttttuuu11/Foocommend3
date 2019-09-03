@@ -63,7 +63,7 @@
 	</insert>
 	<insert id="insertViewRestaurant" parameterType="hashmap">
 		<![CDATA[
-			INSERT INTO view_restaurant(restaurant_idx,username) VALUES(restaurant_idx,username);
+			INSERT INTO view_restaurant(restaurant_idx,username) VALUES(#{restaurantIdx},#{username});
 		]]>
 	</insert>
 	<insert id="likeRestaurant" parameterType="hashmap">

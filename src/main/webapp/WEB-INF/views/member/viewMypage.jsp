@@ -12,9 +12,10 @@
 <style>
 .profileImage {
 	border-radius: 50%;
-	border: solid 3px #fff000;
 }
 </style>
+
+	<!-- border: solid 3px #fff000; -->
 <body>
 
 	<!-- mail auth -->
@@ -201,14 +202,7 @@
 						width="70px" height="70px">
 				</div>
 				<div>
-					<h2 class="mt-3">마이페이지</h2>
-					<h5>
-						<small><img
-							src="<c:url value='/resources/ui_image/view.png'/>" width="15px"
-							height="15px"> 가입일 &nbsp;&nbsp; <img
-							src="<c:url value='/resources/ui_image/comment.png' />"
-							width="15px" height="15px"> 활동점수&nbsp;&nbsp; </small>
-					</h5>
+					<h2 class="mt-4">마이페이지</h2>
 				</div>
 			</div>
 			<div class="row justify-content-center mt-4">
@@ -222,12 +216,12 @@
 						변경</button>
 				</div>
 				<div class="col-md-5" style="vertical-align: middle">
-					<h2 class="mt-3">유저아이디</h2>
+					<h2 class="mt-3">${username}</h2>
 					<h5>
 						<small><img
-							src="<c:url value='/resources/ui_image/view.png'/>" width="15px"
+							src="<c:url value='/resources/ui_image/calendar.png'/>" width="15px"
 							height="15px"> 가입일 &nbsp;&nbsp; <img
-							src="<c:url value='/resources/ui_image/comment.png'/>"
+							src="<c:url value='/resources/ui_image/fork.png'/>"
 							width="15px" height="15px"> 활동점수&nbsp;&nbsp; </small>
 					</h5>
 					<button id="mailAuthBTN" class="btn btn-outline-info mt-4">메일인증</button>
