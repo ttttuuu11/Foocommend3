@@ -1,4 +1,4 @@
-package com.school.foocommend.message.controller;
+package com.school.foocommend.message.handler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +11,7 @@ import com.school.foocommend.message.vo.Message;
 import com.school.foocommend.message.vo.OutputMessage;
 
 @RestController
-public class MessageController {
+public class MessageHandler {
 	
 	@MessageMapping("/chat")
 	@SendTo("/topic/messages")

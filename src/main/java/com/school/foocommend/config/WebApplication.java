@@ -36,7 +36,7 @@ public class WebApplication implements WebApplicationInitializer {
         context.setServletContext(servletContext);
         context.register(WebConfig.class);
         context.refresh();
-
+        
     	ContextLoaderListener listener =new ContextLoaderListener(context);
     	servletContext.addListener(listener);
     	
@@ -48,8 +48,6 @@ public class WebApplication implements WebApplicationInitializer {
         filter.setInitParameter("encoding", "UTF-8");
         filter.addMappingForServletNames(null, false, "dispatcher");
         
-        FilterRegistration.Dynamic xssfilter = servletContext.addFilter("xssEscapeServletFilter", XssEscapeServletFilter.class);
-        xssfilter.addMappingForServletNames(null, false, "xssEscapeServletFilter");
-        xssfilter.addMappingForUrlPatterns(null, false, "/*");
+        
     }    
 }
