@@ -174,7 +174,7 @@ p {
 			var response = document.getElementById('response');
 			var p = document.createElement('p');
 			
-			var messageBox = document.createElement('div');
+			var messageBox =document.createElement('div');
 			messageBox.classList.add("row");
 			
 			var profileImg = document.createElement('img');

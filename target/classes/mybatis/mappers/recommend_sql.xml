@@ -15,7 +15,7 @@
 	</select>
 	<select id="selectRecommendRestaurant" parameterType="String"
 	resultType="hashmap">
-		<![CDATA[ select * from recommend_restaurant where user_name=#{username}]]>
+		<![CDATA[ select * from recommend_restaurant where user_name=#{username} ORDER BY recommend_idx desc limit 10;]]>
 	</select>
 	<select id="selectRestaurantResult" resultType="hashmap" parameterType="hashmap">
 		<![CDATA[

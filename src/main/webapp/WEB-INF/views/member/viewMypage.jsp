@@ -46,13 +46,13 @@
 									});
 									console.log(check)
 									if(check=="F"){
-										const Toast = Swal.mixin({
-											toast : true,
-											showConfirmButton : false,
-											timer : 3000
-										});
+										//const Toast = Swal.mixin({
+										//	toast : true,
+										//	showConfirmButton : false,
+										//	timer : 3000
+										//});
 	
-										Toast.fire({
+										swal.fire({
 											type : 'warning',
 											title : '메일주소가 잘못되었습니다.',
 											html:'회원가입 시 작성한 메일주소가 맞는 지 확인해주세요.'
@@ -70,19 +70,13 @@
 												
 											}),
 											success : function() {
-												//데이터 전송 성공
-												const Toast = Swal.mixin({
-													toast : true,
-													showConfirmButton : false,
-													timer : 3000
-												});
-
-												Toast.fire({
-													type : 'success',
-													title : '메일을 확인해주세요'
-												})
+											
 											}
 										});
+										swal.fire({
+											type : 'success',
+											title : '메일을 확인해주세요'
+										})
 									}
 								}
 							});

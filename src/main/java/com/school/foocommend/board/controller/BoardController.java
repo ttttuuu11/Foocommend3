@@ -58,6 +58,13 @@ public class BoardController {
 	private RecommendService recommendService;
 
 	
+	
+	@RequestMapping(value = "/mailtest")
+	public ModelAndView MailSendTest(Map<String, Object> commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("/mail/mailContent");
+
+		return mv;
+	}
 
 	@RequestMapping(value = "/main")
 	public ModelAndView BoardList(Map<String, Object> commandMap, Model model) throws Exception {

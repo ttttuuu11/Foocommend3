@@ -42,7 +42,19 @@ public class MailSend {
 			InternetAddress to = new InternetAddress(email);
 			msg.setRecipient(javax.mail.Message.RecipientType.TO,to);
 			msg.setSubject("[Foocommend]인증 메일입니다.","UTF-8");
-			msg.setContent("<a href='http://localhost:8080/foocommend/member/mailAuth?uid="+uid+"'>인증하기</a>", "text/html;charset=UTF-8");
+			
+			
+			msg.setContent("<div class=\"mailBox\" onclick=\"location.href='http://localhost:8080/foocommend/member/mailAuth?uid='"+uid+";\"\r\n" + 
+					"		style=\"width: 600px; height: 300px; text-align: center; background-color: #FF9797; \r\n" + 
+					"		background-image:url('http://localhost:8080/foocommend/resources/ui_image/mail_background.jpg'); border-radius: 20px;\">\r\n" + 
+					"		<br> <br>\r\n" + 
+					"		<h1 class=\"whitefont\" style=\"vertical-align: middle; color: white;\">Foocommend</h1>\r\n" + 
+					"		<h3 class=\"whitefont\" style=\"vertical-align: middle; color: white;\">클릭하면\r\n" + 
+					"			인증이 완료됩니다!</h3>\r\n" + 
+					"<a href='http://localhost:8080/foocommend/member/mailAuth?uid=\""+uid+"\"'>"
+							+ "<img src='http://localhost:8080/foocommend/resources/ui_image/tap.png' width=\"dj0px\" height=\"80px\"/>\""
+							+ "</a>"+
+					"	</div>","text/html;charset=UTF-8");
 			Transport.send(msg);
 		}catch(AddressException  ae) {
 			log.debug("AddressException:"+ae.getMessage());
