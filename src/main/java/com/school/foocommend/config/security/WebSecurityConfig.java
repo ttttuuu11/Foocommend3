@@ -83,8 +83,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailService);
-       // authenticationProvider.setPasswordEncoder(passwordEncoder()); //패스워드를 암호활 경우 사용한다
-        authenticationProvider.setPasswordEncoder(noOpPasswordEncoder()); //패스워드를 암호하지 않을 경우 사용한다.
+        authenticationProvider.setPasswordEncoder(passwordEncoder()); //패스워드를 암호활 경우 사용한다
+        //authenticationProvider.setPasswordEncoder(noOpPasswordEncoder()); //패스워드를 암호하지 않을 경우 사용한다.
         return authenticationProvider;
     }
 

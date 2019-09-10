@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +44,9 @@ public class MemberController {
 	
 	@Autowired
 	MailSend mailSend;
+	
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	@RequestMapping(value = "/login")
 	public ModelAndView loginPage() throws Exception {
@@ -74,6 +79,7 @@ public class MemberController {
 	@RequestMapping(value = "/joinMem")
 	public ModelAndView joinMem(UserDto member) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/member/login");
+		member.setPassword(passwordEncoder.encode(member.getPassword()));
 		memberService.insertMember(member);
 		return mv;
 	}
