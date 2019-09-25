@@ -40,21 +40,7 @@ html, body {
 </style>
 </head>
 
-<script>
-	$(function() {
-		// Set effect from select menu value
-		$("#loginBtn").on("click", function() {
-			location.href = "/foocommend/member/login";
-		});
-		// Set effect from select menu value
-		$("#joinBtn").on("click", function() {
-			$("#joinForm").attr("action", "/foocommend/member/joinMem");
-			$("#joinForm").attr("method", "post");
-			$("#joinForm").submit();
-		});
 
-	});
-</script>
 
 <body class="text-center bg-primary">
 	<div class="container justify-content-center">
@@ -110,4 +96,19 @@ html, body {
 	document.getElementById("navbarTop").remove()
 	</script>
 </body>
+<script>
+	$(function() {
+		// Set effect from select menu value
+		$("#loginBtn").on("click", function() {
+			location.href = "/foocommend/member/login";
+		});
+		// Set effect from select menu value
+		$("#joinBtn").on("click", function() {
+			$("#joinForm").attr("action", "/foocommend/member/joinMem");
+			$("#joinForm").attr("method", "post");
+			$("#joinForm").submit();
+		});
+
+	});
+</script>
 </html>

@@ -18,104 +18,7 @@
 	<!-- border: solid 3px #fff000; -->
 <body>
 
-	<!-- mail auth -->
-	<script>
-		$(function() {
-			$("#mailAuthBTN").on("click", function() {
-				swal.fire(
-						{
-							title : '이메일을 입력하세요',
-							html : '<input type="text" name="emailForm" id="emailForm" class="form-control">'
-						}).then(function() {
-							var emailForm = $("#emailForm").val();
-							var check ="";
-							$.ajax({
-								url : '/foocommend/member/mailCheck',
-								headers : {
-									"Content-Type" : "application/json; charset=UTF-8",
-									"X-HTTP-Method-Override" : "POST"
-								},
-								dataType : 'json',
-								type : 'post',
-								data : JSON.stringify({ // 서버로 보낼 데이터 명시
-									email: emailForm
-								}),
-								success : function(data) {
-									$(data).each(function() {
-										check = String(this.check)
-									});
-									console.log(check)
-									if(check=="F"){
-										//const Toast = Swal.mixin({
-										//	toast : true,
-										//	showConfirmButton : false,
-										//	timer : 3000
-										//});
 	
-										swal.fire({
-											type : 'warning',
-											title : '메일주소가 잘못되었습니다.',
-											html:'회원가입 시 작성한 메일주소가 맞는 지 확인해주세요.'
-										})
-									}else{
-										$.ajax({
-											url : '/foocommend/member/mail',
-											headers : {
-												"Content-Type" : "application/json; charset=UTF-8",
-												"X-HTTP-Method-Override" : "POST"
-											},
-											dataType : 'json',
-											type : 'post',
-											data : JSON.stringify({ // 서버로 보낼 데이터 명시
-												
-											}),
-											success : function() {
-											
-											}
-										});
-										swal.fire({
-											type : 'success',
-											title : '메일을 확인해주세요'
-										})
-									}
-								}
-							});
-				});
-			});
-
-			$("#changeProfileImgBTN")
-					.on(
-							"click",
-							function() {
-								swal
-										.fire(
-												{
-													title : '이미지 선택',
-													html : '<form id="imageForm" method="post" action="/foocommend/upload/uploadForm" enctype="multipart/form-data"><input type="file" name="file"></form>'
-												}).then(function() {
-											$("#imageForm").submit();
-											alert("파일 업로드 됨");
-										});
-							});
-		})
-
-		function post_to_url(path, params, method) {
-			console.log("post_to_url임");
-			var form = document.createElement("form");
-			form.setAttribute("method", "post");
-			form.setAttribute("action", path);
-			form.setAttribute("enctype", "multipart/form-data");
-			for ( var key in params) {
-				var hiddenField = document.createElement("input");
-				hiddenField.setAttribute("type", "file");
-				hiddenField.setAttribute("name", key);
-				hiddenField.setAttribute("value", params[key]);
-				form.appendChild(hiddenField);
-			}
-			document.body.appendChild(form);
-			form.submit();
-		}
-	</script>
 
 	<div class="row">
 		<!-- foodCategorys -->
@@ -225,4 +128,103 @@
 
 	</div>
 </body>
+
+<!-- mail auth -->
+	<script>
+		$(function() {
+			$("#mailAuthBTN").on("click", function() {
+				swal.fire(
+						{
+							title : '이메일을 입력하세요',
+							html : '<input type="text" name="emailForm" id="emailForm" class="form-control">'
+						}).then(function() {
+							var emailForm = $("#emailForm").val();
+							var check ="";
+							$.ajax({
+								url : '/foocommend/member/mailCheck',
+								headers : {
+									"Content-Type" : "application/json; charset=UTF-8",
+									"X-HTTP-Method-Override" : "POST"
+								},
+								dataType : 'json',
+								type : 'post',
+								data : JSON.stringify({ // 서버로 보낼 데이터 명시
+									email: emailForm
+								}),
+								success : function(data) {
+									$(data).each(function() {
+										check = String(this.check)
+									});
+									console.log(check)
+									if(check=="F"){
+										//const Toast = Swal.mixin({
+										//	toast : true,
+										//	showConfirmButton : false,
+										//	timer : 3000
+										//});
+	
+										swal.fire({
+											type : 'warning',
+											title : '메일주소가 잘못되었습니다.',
+											html:'회원가입 시 작성한 메일주소가 맞는 지 확인해주세요.'
+										})
+									}else{
+										$.ajax({
+											url : '/foocommend/member/mail',
+											headers : {
+												"Content-Type" : "application/json; charset=UTF-8",
+												"X-HTTP-Method-Override" : "POST"
+											},
+											dataType : 'json',
+											type : 'post',
+											data : JSON.stringify({ // 서버로 보낼 데이터 명시
+												
+											}),
+											success : function() {
+											
+											}
+										});
+										swal.fire({
+											type : 'success',
+											title : '메일을 확인해주세요'
+										})
+									}
+								}
+							});
+				});
+			});
+
+			$("#changeProfileImgBTN")
+					.on(
+							"click",
+							function() {
+								swal
+										.fire(
+												{
+													title : '이미지 선택',
+													html : '<form id="imageForm" method="post" action="/foocommend/upload/uploadForm" enctype="multipart/form-data"><input type="file" name="file"></form>'
+												}).then(function() {
+											$("#imageForm").submit();
+											alert("파일 업로드 됨");
+										});
+							});
+		})
+
+		function post_to_url(path, params, method) {
+			console.log("post_to_url임");
+			var form = document.createElement("form");
+			form.setAttribute("method", "post");
+			form.setAttribute("action", path);
+			form.setAttribute("enctype", "multipart/form-data");
+			for ( var key in params) {
+				var hiddenField = document.createElement("input");
+				hiddenField.setAttribute("type", "file");
+				hiddenField.setAttribute("name", key);
+				hiddenField.setAttribute("value", params[key]);
+				form.appendChild(hiddenField);
+			}
+			document.body.appendChild(form);
+			form.submit();
+		}
+	</script>
 </html>

@@ -118,93 +118,7 @@ column-count
 <body>
 	<!-- value -->
 	<input type="hidden" value="${username }" id="username">
-	<!-- menu click -->
-	<script>
-		$(function() {
-			$(".restaurantCard")
-					.on(
-							"click",
-							function() {
-								restaurantIdx = $(this).parent().children(
-										":eq(0)").val();
-								location.href = "/foocommend/board/detail?restaurantIdx="
-										+ restaurantIdx;
-							});
-			$(".restaurantCardImage")
-					.on(
-							"click",
-							function() {
-								restaurantIdx = $(this).parent().children(
-										":eq(0)").val();
-								location.href = "/foocommend/board/detail?restaurantIdx="
-										+ restaurantIdx;
-							});
-			$(".restaurantCard").hover(function() {
-				$(this).parent().css("border", "solid 3px #ffaaaa");
-			}, function() {
-				$(this).parent().css("border", "solid 0px");
-			});
-			$(".restaurantCardImage").hover(function() {
-				$(this).parent().css("border", "solid 3px #ffaaaa");
-			}, function() {
-				$(this).parent().css("border", "solid 0px");
-			});
-		});
-	</script>
-
-	<!-- scrap ajax -->
-	<script>
-		$(function() {
-			$(".scrapBTN")
-					.on(
-							"click",
-							function() {
-								$(this)
-										.children(":eq(0)")
-										.attr("src",
-												"<c:url value='/resources/ui_image/star.png'/>")
-								var restaurantIdx_ = $(this).parent().parent()
-										.children(":eq(0)").val();
-								var userName_ = $("#username").val()
-
-								$
-										.ajax({
-											url : '/foocommend/board/scrap',
-											headers : {
-												"Content-Type" : "application/json; charset=UTF-8",
-												"X-HTTP-Method-Override" : "POST"
-											},
-											dataType : 'json',
-											type : 'post',
-											data : JSON.stringify({ // 서버로 보낼 데이터 명시
-												restaurantIdx : restaurantIdx_,
-												userName : userName_
-											}),
-											success : function() {
-												//데이터 전송 성공
-												const Toast = Swal.mixin({
-													toast : true,
-													position : 'top-end',
-													showConfirmButton : false,
-													timer : 3000
-												});
-
-												Toast.fire({
-													type : 'success',
-													title : '스크랩 성공!'
-												})
-
-												//Swal.fire({
-												//	type : 'success',
-												//	title : '스크랩!',
-												//	showConfirmButton : false,
-												//	timer : 1500
-												//});
-											}
-										});
-							});
-		});
-	</script>
+	
 
 
 	<div class="row">
@@ -322,4 +236,86 @@ column-count
 		</div>
 	</div>
 </body>
+<!-- menu click -->
+	<script>
+		$(function() {
+			$(".restaurantCard")
+					.on(
+							"click",
+							function() {
+								restaurantIdx = $(this).parent().children(
+										":eq(0)").val();
+								location.href = "/foocommend/board/detail?restaurantIdx="
+										+ restaurantIdx;
+							});
+			$(".restaurantCardImage")
+					.on(
+							"click",
+							function() {
+								restaurantIdx = $(this).parent().children(
+										":eq(0)").val();
+								location.href = "/foocommend/board/detail?restaurantIdx="
+										+ restaurantIdx;
+							});
+			$(".restaurantCard").hover(function() {
+				$(this).parent().css("border", "solid 3px #ffaaaa");
+			}, function() {
+				$(this).parent().css("border", "solid 0px");
+			});
+			$(".restaurantCardImage").hover(function() {
+				$(this).parent().css("border", "solid 3px #ffaaaa");
+			}, function() {
+				$(this).parent().css("border", "solid 0px");
+			});
+	
+			$(".scrapBTN")
+					.on(
+							"click",
+							function() {
+								$(this)
+										.children(":eq(0)")
+										.attr("src",
+												"<c:url value='/resources/ui_image/star.png'/>")
+								var restaurantIdx_ = $(this).parent().parent()
+										.children(":eq(0)").val();
+								var userName_ = $("#username").val()
+
+								$
+										.ajax({
+											url : '/foocommend/board/scrap',
+											headers : {
+												"Content-Type" : "application/json; charset=UTF-8",
+												"X-HTTP-Method-Override" : "POST"
+											},
+											dataType : 'json',
+											type : 'post',
+											data : JSON.stringify({ // 서버로 보낼 데이터 명시
+												restaurantIdx : restaurantIdx_,
+												userName : userName_
+											}),
+											success : function() {
+												//데이터 전송 성공
+												const Toast = Swal.mixin({
+													toast : true,
+													position : 'top-end',
+													showConfirmButton : false,
+													timer : 3000
+												});
+
+												Toast.fire({
+													type : 'success',
+													title : '스크랩 성공!'
+												})
+
+												//Swal.fire({
+												//	type : 'success',
+												//	title : '스크랩!',
+												//	showConfirmButton : false,
+												//	timer : 1500
+												//});
+											}
+										});
+							});
+		});
+	</script>
 </html>

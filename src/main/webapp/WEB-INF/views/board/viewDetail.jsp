@@ -48,201 +48,7 @@
 
 
 <body>
-	<!-- BTN -->
-	<script>
-		$(function(){
-		$("#likeBTN").on("click",function(){
-			var restaurantIdx= $("#restaurantIdx").val();
-			$.ajax({
-						type : 'post', // 요청 method 방식
-						url : '/foocommend/board/likeRestaurant',// 요청할 서버의 url
-						headers : {
-							"Content-Type" : "application/json",
-							"X-HTTP-Method-Override" : "POST"
-						},
-						dataType : 'json', // 서버로부터 되돌려받는 데이터의 타입을 명시하는 것이다.
-						data : JSON.stringify({ // 서버로 보낼 데이터 명시
-							username : '<%=session.getAttribute("username")%>',
-							restaurantIdx : restaurantIdx
-						}),
-						success : function(data) {// ajax 가 성공했을시에 수행될 function이다. 이 function의 파라미터는 서버로 부터 return받은 데이터이다.
-							console.log(data);
-							if (data != "") {
-								$(data).each(function() {
-									const Toast = Swal.mixin({
-										toast : true,
-										position : 'top-end',
-										showConfirmButton : false,
-										timer : 3000
-									});
-									
-									if($(".likeCount").text()==this.countL){
-										Toast.fire({
-											type : 'warning',
-											title : this.msg
-										});
-									}else{
-										Toast.fire({
-											type : 'success',
-											title : this.msg
-										});
-										$(".likeCount").text(this.countL);
-									}
-								});
-							}// if : data!=null
-						}// success
-					});// ajax
-		});
-		$("#insertCommentBTN").on("click",function(){
-			var restaurant_idx= $("#restaurant_idx").val();
-			var username= $("#username").val();
-			var comment_content= $("#comment_content").val();
-			var profile_img = $("#profile_img").val();	
-			var reply_username=$("#reply_username").val();
-			var parent_comment_idx=$("#parent_comment_idx").val();
-						
-			$("#comment_content").val("");
-				$.ajax({
-					type : 'post', // 요청 method 방식
-					url : '/foocommend/comment/insertComment',// 요청할 서버의 url
-					headers : {
-						"Content-Type" : "application/json",
-						"X-HTTP-Method-Override" : "POST"
-					},
-					dataType : 'json', // 서버로부터 되돌려받는 데이터의 타입을 명시
-					data : JSON.stringify({ // 서버로 보낼 데이터 명시
-						username : username,
-						restaurantIdx : restaurant_idx,
-						commentContent : comment_content,
-						profileImg : profile_img,
-						reply_username : reply_username,
-						parent_comment_idx : parent_comment_idx
-					}),	
-					success : function(data) {
-						var str = '';	
-						if(data!=''){	
-							$(data).each(function() {
-									str+= '<div class="comment">'
-									+'<div class="row">'
-									+'<img src="/foocommend/resources/userProfile/'+this.profile_img+'"'
-										+'width="50px" height="50px">'
-									+'<p class="mt-3 ml-2 comment_username">'+this.username+'</p>'
-									+'<p class="mt-3 ml-1 comment_date">'
-										+'<small>'+this.create_date+'</small>'
-									+'</p>'
-								+'</div>'
-								+'<div class="row">'
-									+'<div class="col-lg-11 col-md-11 mb-1 mt-1">'
-										+'<p class="content">'+this.comment_content+'</p>'
-									+'</div>'
-								+'</div>'
-								+'<div class="row justify-content-end mt-1">'
-									+'<a class="commentMenu mr-1 reply">답글</a>'
-										+'<a class="commentMenu mr-1" href="#">수정</a>'
-										+'<a class="commentMenu mr-1" href="#">삭제</a>'
-								+'</div>'
-							+'</div>';
-							});
-						}
-						$(".removeCommentArea").remove();
-						$(".commentArea").after(str);
-						
-						var commentForm = $("#commentForm").detach();
-						var commentReplyForm = $(this).parent().parent().parent();
-						$(".comment:last").after(commentForm);
-						const Toast = Swal.mixin({
-							toast : true,
-							position : 'top-end',
-							showConfirmButton : false,
-							timer : 3000
-						});
-						Toast.fire({
-								type : 'success',
-								title : '댓글을 등록했습니다.'
-						});
-						console.log(data);
-						if (data != "") {
-							$(data).each(function() {
-								console.log(this.comment_idx)
-							});
-						}
-					}// success
-				});// ajax
-		});
-		
-		$(".reply").each(function(i) {
-			$(this).on("click",function() {
-				var commentForm = $("#commentForm").detach();
-				var commentReplyForm = $(this).parent().parent().parent();
-				commentReplyForm.after(commentForm);
-				commentForm.children(":eq(3)").val($(this).parent().parent().children(":eq(0)").val());
-				commentForm.children(":eq(4)").val($(this).parent().parent().parent().children(":eq(0)").children(":eq(1)").text());
-				$('#commentForm').addClass('ml-5');
-				
-			});
-		});
-		
-		$(".showReplyCommentBTN").on("click",function(){
-			var table = $(this).parent();
-			var comment_idx = $(this).parent().children(":eq(0)").val();
-			$('.showReplyCommentBTN').removeClass('showReplyCommentBTN');
-
-			$.ajax({
-				type : 'post', // 요청 method 방식
-				url : '/foocommend/comment/selectReplyComment',// 요청할 서버의 url
-				headers : {
-					"Content-Type" : "application/json",
-					"X-HTTP-Method-Override" : "POST"
-				},
-				dataType : 'json', // 서버로부터 되돌려받는 데이터의 타입을 명시하는 것이다.
-				data : JSON.stringify({ // 서버로 보낼 데이터 명시
-					parent_comment_idx : comment_idx					
-				}),	
-				success : function(data) {// ajax 가 성공했을시에 수행될 function이다. 이 function의 파라미터는 서버로 부터 return받은 데이터이다.
-					var str = '';	
-					console.log(data);
-					if(data!=''){	
-						$(data).each(function() {
-								str+= '<div class="replyComment'+this.parent_comment_idx+'">'
-								+'<div class="comment ml-5">'
-								+'<div class="row">'
-								+'<img src="/foocommend/resources/userProfile/'+this.profile_img+'"'
-									+'width="50px" height="50px">'
-								+'<p class="mt-3 ml-2 comment_username">'+this.username+'</p>'
-								+'<p class="mt-3 ml-1 comment_date">'
-									+'<small>'+this.create_date+'</small>'
-								+'</p>'
-							+'</div>'
-							+'<div class="row">'
-								+'<div class="col-lg-11 col-md-11 mb-1 mt-1">'
-									+'<p class="content">'+this.comment_content+'</p>'
-								+'</div>'
-							+'</div>'
-							+'<div class="row justify-content-end mt-1">'
-								+'<a class="commentMenu mr-1 reply">답글</a>'
-									+'<a class="commentMenu mr-1" href="#">수정</a>'
-									+'<a class="commentMenu mr-1" href="#">삭제</a>'
-							+'</div>'
-						+'</div></div>';
-						});
-					}
-					
-					$(".replyComment"+comment_idx).remove();
-					table.after(str);
-				}// success
-			});// ajax
-		});
-	})
-	</script>
-	<script>
-	    $(document).ready(function() {
-	     	 $('.wrap').on( 'keyup', 'textarea', function (e){
-	    		$(this).css('height', 'auto' );
-	      		$(this).height( this.scrollHeight );
-	     	 });
-	     	 $('.wrap').find( 'textarea' ).keyup();
-	    });
-  </script>
+	
 
 	<div class="row">
 		<!-- foodCategorys -->
@@ -472,4 +278,199 @@
 		</script>
 	</div>
 </body>
+<!-- BTN -->
+	<script>
+		$(function(){
+		$("#likeBTN").on("click",function(){
+			var restaurantIdx= $("#restaurantIdx").val();
+			$.ajax({
+						type : 'post', // 요청 method 방식
+						url : '/foocommend/board/likeRestaurant',// 요청할 서버의 url
+						headers : {
+							"Content-Type" : "application/json",
+							"X-HTTP-Method-Override" : "POST"
+						},
+						dataType : 'json', // 서버로부터 되돌려받는 데이터의 타입을 명시하는 것이다.
+						data : JSON.stringify({ // 서버로 보낼 데이터 명시
+							username : '<%=session.getAttribute("username")%>',
+							restaurantIdx : restaurantIdx
+						}),
+						success : function(data) {// ajax 가 성공했을시에 수행될 function이다. 이 function의 파라미터는 서버로 부터 return받은 데이터이다.
+							console.log(data);
+							if (data != "") {
+								$(data).each(function() {
+									const Toast = Swal.mixin({
+										toast : true,
+										position : 'top-end',
+										showConfirmButton : false,
+										timer : 3000
+									});
+									
+									if($(".likeCount").text()==this.countL){
+										Toast.fire({
+											type : 'warning',
+											title : this.msg
+										});
+									}else{
+										Toast.fire({
+											type : 'success',
+											title : this.msg
+										});
+										$(".likeCount").text(this.countL);
+									}
+								});
+							}// if : data!=null
+						}// success
+					});// ajax
+		});
+		$("#insertCommentBTN").on("click",function(){
+			var restaurant_idx= $("#restaurant_idx").val();
+			var username= $("#username").val();
+			var comment_content= $("#comment_content").val();
+			var profile_img = $("#profile_img").val();	
+			var reply_username=$("#reply_username").val();
+			var parent_comment_idx=$("#parent_comment_idx").val();
+						
+			$("#comment_content").val("");
+				$.ajax({
+					type : 'post', // 요청 method 방식
+					url : '/foocommend/comment/insertComment',// 요청할 서버의 url
+					headers : {
+						"Content-Type" : "application/json",
+						"X-HTTP-Method-Override" : "POST"
+					},
+					dataType : 'json', // 서버로부터 되돌려받는 데이터의 타입을 명시
+					data : JSON.stringify({ // 서버로 보낼 데이터 명시
+						username : username,
+						restaurantIdx : restaurant_idx,
+						commentContent : comment_content,
+						profileImg : profile_img,
+						reply_username : reply_username,
+						parent_comment_idx : parent_comment_idx
+					}),	
+					success : function(data) {
+						var str = '';	
+						if(data!=''){	
+							$(data).each(function() {
+									str+= '<div class="comment">'
+									+'<div class="row">'
+									+'<img src="/foocommend/resources/userProfile/'+this.profile_img+'"'
+										+'width="50px" height="50px">'
+									+'<p class="mt-3 ml-2 comment_username">'+this.username+'</p>'
+									+'<p class="mt-3 ml-1 comment_date">'
+										+'<small>'+this.create_date+'</small>'
+									+'</p>'
+								+'</div>'
+								+'<div class="row">'
+									+'<div class="col-lg-11 col-md-11 mb-1 mt-1">'
+										+'<p class="content">'+this.comment_content+'</p>'
+									+'</div>'
+								+'</div>'
+								+'<div class="row justify-content-end mt-1">'
+									+'<a class="commentMenu mr-1 reply">답글</a>'
+										+'<a class="commentMenu mr-1" href="#">수정</a>'
+										+'<a class="commentMenu mr-1" href="#">삭제</a>'
+								+'</div>'
+							+'</div>';
+							});
+						}
+						$(".removeCommentArea").remove();
+						$(".commentArea").after(str);
+						
+						var commentForm = $("#commentForm").detach();
+						var commentReplyForm = $(this).parent().parent().parent();
+						$(".comment:last").after(commentForm);
+						const Toast = Swal.mixin({
+							toast : true,
+							position : 'top-end',
+							showConfirmButton : false,
+							timer : 3000
+						});
+						Toast.fire({
+								type : 'success',
+								title : '댓글을 등록했습니다.'
+						});
+						console.log(data);
+						if (data != "") {
+							$(data).each(function() {
+								console.log(this.comment_idx)
+							});
+						}
+					}// success
+				});// ajax
+		});
+		
+		$(".reply").each(function(i) {
+			$(this).on("click",function() {
+				var commentForm = $("#commentForm").detach();
+				var commentReplyForm = $(this).parent().parent().parent();
+				commentReplyForm.after(commentForm);
+				commentForm.children(":eq(3)").val($(this).parent().parent().children(":eq(0)").val());
+				commentForm.children(":eq(4)").val($(this).parent().parent().parent().children(":eq(0)").children(":eq(1)").text());
+				$('#commentForm').addClass('ml-5');
+				
+			});
+		});
+		
+		$(".showReplyCommentBTN").on("click",function(){
+			var table = $(this).parent();
+			var comment_idx = $(this).parent().children(":eq(0)").val();
+			$('.showReplyCommentBTN').removeClass('showReplyCommentBTN');
+
+			$.ajax({
+				type : 'post', // 요청 method 방식
+				url : '/foocommend/comment/selectReplyComment',// 요청할 서버의 url
+				headers : {
+					"Content-Type" : "application/json",
+					"X-HTTP-Method-Override" : "POST"
+				},
+				dataType : 'json', // 서버로부터 되돌려받는 데이터의 타입을 명시하는 것이다.
+				data : JSON.stringify({ // 서버로 보낼 데이터 명시
+					parent_comment_idx : comment_idx					
+				}),	
+				success : function(data) {// ajax 가 성공했을시에 수행될 function이다. 이 function의 파라미터는 서버로 부터 return받은 데이터이다.
+					var str = '';	
+					console.log(data);
+					if(data!=''){	
+						$(data).each(function() {
+								str+= '<div class="replyComment'+this.parent_comment_idx+'">'
+								+'<div class="comment ml-5">'
+								+'<div class="row">'
+								+'<img src="/foocommend/resources/userProfile/'+this.profile_img+'"'
+									+'width="50px" height="50px">'
+								+'<p class="mt-3 ml-2 comment_username">'+this.username+'</p>'
+								+'<p class="mt-3 ml-1 comment_date">'
+									+'<small>'+this.create_date+'</small>'
+								+'</p>'
+							+'</div>'
+							+'<div class="row">'
+								+'<div class="col-lg-11 col-md-11 mb-1 mt-1">'
+									+'<p class="content">'+this.comment_content+'</p>'
+								+'</div>'
+							+'</div>'
+							+'<div class="row justify-content-end mt-1">'
+								+'<a class="commentMenu mr-1 reply">답글</a>'
+									+'<a class="commentMenu mr-1" href="#">수정</a>'
+									+'<a class="commentMenu mr-1" href="#">삭제</a>'
+							+'</div>'
+						+'</div></div>';
+						});
+					}
+					
+					$(".replyComment"+comment_idx).remove();
+					table.after(str);
+				}// success
+			});// ajax
+		});
+	})
+	</script>
+	<script>
+	    $(document).ready(function() {
+	     	 $('.wrap').on( 'keyup', 'textarea', function (e){
+	    		$(this).css('height', 'auto' );
+	      		$(this).height( this.scrollHeight );
+	     	 });
+	     	 $('.wrap').find( 'textarea' ).keyup();
+	    });
+  </script>
 </html>
